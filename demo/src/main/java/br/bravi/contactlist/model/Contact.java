@@ -28,6 +28,12 @@ public class Contact {
 		
 	}
 
+	public Contact(ContactType contactType, String contact) {
+		super();
+		this.contactType = contactType;
+		this.contact = contact;
+	}
+	
 	public Contact(Person person, ContactType contactType, String contact) {
 		super();
 		this.person = person;
