@@ -1,8 +1,12 @@
 package br.bravi.contactlist;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PersonController {
 	
-	@Autowired
 	private PersonRepository repository;
 	
+	private PersonResourceAssembler assembler;
+	
+	public PersonController(PersonRepository repository, PersonResourceAssembler assembler) {
+		this.repository = repository;
+		this.assembler = assembler;
+	}
+	
 	@GetMapping("/people")
-	List<Person> all() {
-		return repository.findAll();
+	Resources<Resource<Person>> all() {
+
+		List<Resource<Person>> people = repository.findAll().stream()
+				.map(assembler::toResource)
+				.collect(Collectors.toList());
+
+		return new Resources<>(people,
+			linkTo(methodOn(PersonController.class).all()).withSelfRel());
 	}
 
 	@PostMapping("/people")
@@ -27,14 +43,16 @@ public class PersonController {
 		return repository.save(newPerson);
 	}
 	
-	@GetMapping("/person/{id}")
-	Person one(@PathVariable Long id) {
+	@GetMapping("/people/{id}")
+	Resource<Person> one(@PathVariable Long id) {
 
-		return repository.findById(id)
+		Person person = repository.findById(id)
 			.orElseThrow(() -> new PersonNotFoundException(id));
-	}
 
-	@PutMapping("/person/{id}")
+		return assembler.toResource(person);
+	}
+	
+	@PutMapping("/people/{id}")
 	Person replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
 
 		return repository.findById(id)
@@ -48,7 +66,7 @@ public class PersonController {
 			});
 	}
 
-	@DeleteMapping("/person/{id}")
+	@DeleteMapping("/people/{id}")
 	void deletePerson(@PathVariable Long id) {
 		repository.deleteById(id);
 	}
