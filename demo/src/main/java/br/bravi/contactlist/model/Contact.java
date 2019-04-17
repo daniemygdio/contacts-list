@@ -1,11 +1,12 @@
 package br.bravi.contactlist.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -23,6 +24,12 @@ public class Contact {
 	private ContactType contactType;
 	
 	private String contact;
+	
+	@JsonIgnore
+	Person getPerson() {
+		return this.person;
+	}
+	
 	
 	public Contact() {
 		
