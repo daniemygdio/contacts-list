@@ -1,4 +1,4 @@
-package br.bravi.contactlist;
+package br.bravi.contactlist.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.bravi.contactlist.data.PersonRepository;
+import br.bravi.contactlist.data.PersonResourceAssembler;
+import br.bravi.contactlist.exception.PersonNotFoundException;
+import br.bravi.contactlist.model.Person;
+
 @RestController
 public class PersonController {
 	
@@ -28,7 +33,7 @@ public class PersonController {
 	}
 	
 	@GetMapping("/people")
-	Resources<Resource<Person>> all() {
+	public Resources<Resource<Person>> all() {
 
 		List<Resource<Person>> people = repository.findAll().stream()
 				.map(assembler::toResource)
@@ -39,12 +44,12 @@ public class PersonController {
 	}
 
 	@PostMapping("/people")
-	Person newPerson(@RequestBody Person newPerson) {
+	public Person newPerson(@RequestBody Person newPerson) {
 		return repository.save(newPerson);
 	}
 	
 	@GetMapping("/people/{id}")
-	Resource<Person> one(@PathVariable Long id) {
+	public Resource<Person> one(@PathVariable Long id) {
 
 		Person person = repository.findById(id)
 			.orElseThrow(() -> new PersonNotFoundException(id));
@@ -53,7 +58,7 @@ public class PersonController {
 	}
 	
 	@PutMapping("/people/{id}")
-	Person replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
+	public Person replacePerson(@RequestBody Person newPerson, @PathVariable Long id) {
 
 		return repository.findById(id)
 			.map(person -> {

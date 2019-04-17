@@ -1,4 +1,4 @@
-package br.bravi.contactlist;
+package br.bravi.contactlist.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

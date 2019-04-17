@@ -1,7 +1,7 @@
-package br.bravi.contactlist;
+package br.bravi.contactlist.exception;
 
 public class PersonNotFoundException extends RuntimeException {
-	PersonNotFoundException(Long id) {
+	public PersonNotFoundException(Long id) {
 		super("Could not find employee " + id);
 	}
 }

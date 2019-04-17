@@ -1,4 +1,4 @@
-package br.bravi.contactlist;
+package br.bravi.contactlist.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

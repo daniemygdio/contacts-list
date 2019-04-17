@@ -1,10 +1,12 @@
-package br.bravi.contactlist;
+package br.bravi.contactlist.data;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import br.bravi.contactlist.model.Person;
 
 @Configuration
 @Slf4j
